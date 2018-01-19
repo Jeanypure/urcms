@@ -33,7 +33,6 @@
                 itemStyle: {normal: {areaStyle: {type: 'default'}}},
                 data:value[index]
             };
-//            console.log(single_line);
             line.push(single_line);
         }
         option = {

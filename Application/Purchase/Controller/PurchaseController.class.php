@@ -134,6 +134,7 @@ class PurchaseController extends ParentController
 
         $sql = "exec z_p_purchaserProfit '1','$data[BeginDate]','$data[EndDate]','','','0','','','','','','$data[Purchase]','0','0','0',0";
         $result = $M->query($sql);
+        //echo $sql;die;
         session('result',$result);
         $this->display('purchase_netprofit');
 

@@ -112,28 +112,27 @@ class TrendController extends ParentController
             }
         }
         $max_dates = [];
-        foreach ($rows as $key=>$value){
-            $dates = [];
-            $amt = [];
-            $dates_amt = [];
-
-            foreach ($res as $res_key=>$res_value){
-                if($value == $res_value['title']){
-                    array_push($dates, $res_value['ordertime']);
-                    array_push($amt, round($res_value['totalamt'],0));
-
+            foreach ($rows as $key=>$value){
+                $dates = [];
+                $amt = [];
+                $dates_amt = [];
+                foreach ($res as $res_key=>$res_value){
+                    if($value == $res_value['title']){
+                        array_push($dates, $res_value['ordertime']);
+                        array_push($amt, round($res_value['totalamt'],0));
+                    }
+                    $dates_amt['amt'] = $amt.'$';
                 }
-                $dates_amt['amt'] = $amt.'$';
-            }
-            array_push($data,$amt);
-            $max_dates = count($dates) > count($max_dates)?$dates:$max_dates;
+                array_push($data,$amt);
+                $max_dates = count($dates) > count($max_dates)?$dates:$max_dates;
         }
 
         $final['ordertime'] = $max_dates;
         $final['title'] = $rows;
         $final['value'] = $data;
+
         session('final',$final);
-            $this->display('trendview');
+        $this->display('trendview');
 
     }
 
@@ -142,7 +141,6 @@ class TrendController extends ParentController
         $ret = json_encode($final);
         echo $ret;
         session('final',null);
-
     }
 
 
@@ -277,8 +275,6 @@ class TrendController extends ParentController
 
 
         }elseif($username=='admin'){
-
-
             $saData = $_POST;
             //全空 按销售
             //0000
@@ -313,7 +309,6 @@ class TrendController extends ParentController
             if(empty($_POST['department'])&&!empty($_POST['pingtai'])&&!empty($_POST['saler'])&&empty($_POST['suffix'])){
 
                 $saData['pingtai'] = '';
-//                $saData['pingtai'] = rtrim(implode($_POST['pingtai'],','),',');
                 $saData['saler'] = rtrim(implode($_POST['saler'],','),',');
             }
             //0111
@@ -322,15 +317,12 @@ class TrendController extends ParentController
                 $saData['saler'] = '';
                 $saData['suffix'] = rtrim(implode($_POST['suffix'],','),',');
             }
-
-
             //1000
             if(!empty($_POST['department'])&&empty($_POST['pingtai'])&&empty($_POST['saler'])&&empty($_POST['suffix'])){
 
                 $saData['department'] = rtrim(implode($_POST['department'],','),',');
 
             }
-
             //            1001
             if(!empty($_POST['department'])&&empty($_POST['pingtai'])&&empty($_POST['saler'])&&!empty($_POST['suffix'])){
                 $saData['department'] = '' ;
@@ -341,7 +333,6 @@ class TrendController extends ParentController
                 $saData['department'] = '' ;
                 $saData['saler'] = rtrim(implode($_POST['saler'],','),',');
             }
-
             //            1011
             if(!empty($_POST['department'])&&empty($_POST['pingtai'])&&!empty($_POST['saler'])&&!empty($_POST['suffix'])){
                 $saData['department'] = '' ;
@@ -376,11 +367,6 @@ class TrendController extends ParentController
                 $saData['suffix'] = rtrim(implode($_POST['suffix'],','),',');
 
             }
-//
-//            $_POST['department'] = rtrim(implode($_POST['department'],','),',');
-//            $_POST['pingtai'] = rtrim(implode($_POST['pingtai'],','),',');
-//            $_POST['saler'] = rtrim(implode($_POST['saler'],','),',');
-//            $_POST['suffix'] = rtrim(implode($_POST['suffix'],','),',');
             $this->commsql($saData);
 
         }else{
@@ -495,7 +481,7 @@ class TrendController extends ParentController
       {
           $Model = M();
           $sql = "z_p_saletrendy $da[DateFlag], '$da[BeginDate]', '$da[EndDate]', $da[Flag], '$da[saler]','$da[pingtai]','$da[suffix]','$da[department]'";
-//echo    $sql;die;
+
           $res = $Model->query($sql);
           $rows = [];
           $data = [];
@@ -525,6 +511,7 @@ class TrendController extends ParentController
           $final['ordertime'] = $max_dates;
           $final['title'] = $rows;
           $final['value'] = $data;
+//          var_dump($final);die;
           session('final',$final);
           $this->display('trendview');
 

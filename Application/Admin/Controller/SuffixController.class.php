@@ -82,11 +82,11 @@ class SuffixController extends Controller
     }
 
 
-/*
- * 删除账号 根据 账号对应的 ID 删除
- * Y_SuffixSalerman,Y_Suffixpingtai
- *
- */
+    /*
+     * 删除账号 根据 账号对应的 ID 删除
+     * Y_SuffixSalerman,Y_Suffixpingtai
+     *
+     */
     public  function delete_suffix(){
        $M =M();
        $data['id'] = $_POST['id'];
