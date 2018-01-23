@@ -18,8 +18,6 @@ class DepartmentController extends Controller {
 	}
 
 	public function dev_department(){
-//	    dump($_GET);die;
-
         $Model = M();
         $sql ="select u.username from Y_userDepartment d
                 left JOIN Y_user  u ON u.uid=d.uid
