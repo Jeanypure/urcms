@@ -89,19 +89,19 @@ class DevClearnController extends ParentController
             $date               =  (string)$sheet->getCell("E".$i)->getValue();
             $stamp_date         = \PHPExcel_Shared_Date::ExcelToPHP($date);//将获取的奇怪数字转成时间戳，该时间戳会自动带上当前日期
             $data['devClearnTime'] = gmdate("Y-m-d ",$stamp_date);//这个就是excel表中的数据了，棒棒的！
-
+            $data['storename'] = $sheet->getCell("F".$i)->getValue();
             $Model = M();
-            $sql = "select * from Y_devOfflineClearn WHERE SalerName='$data[SalerName]' AND  SalerName2='$data[SalerName2]' AND  devClearnTime='$data[devClearnTime]'";
+            $sql = "select * from Y_devOfflineClearn WHERE SalerName='$data[SalerName]' AND  SalerName2='$data[SalerName2]' AND  devClearnTime='$data[devClearnTime]' AND storename= '$data[storename]'";
             $res = $Model->execute($sql);
 
 
             if(!$res){
-                $sql = "INSERT INTO Y_devOfflineClearn (SalerName,SalerName2,TimeGroup,Amount,devClearnTime) VALUES('$data[SalerName]','$data[SalerName2]','$data[TimeGroup]','$data[Amount]','$data[devClearnTime]')";
+                $sql = "INSERT INTO Y_devOfflineClearn (SalerName,SalerName2,TimeGroup,Amount,devClearnTime,storename) VALUES('$data[SalerName]','$data[SalerName2]','$data[TimeGroup]','$data[Amount]','$data[devClearnTime]',' $data[storename]')";
                 //$result = M('saleOpeFee')->add($data);                                                               //不存在做插入
             }else{
 
                 $sql = "UPDATE Y_devOfflineClearn SET SalerName='$data[SalerName]',SalerName2='$data[SalerName2]',TimeGroup='$data[TimeGroup]',Amount='$data[Amount]', devClearnTime='$data[devClearnTime]'
-                        WHERE SalerName='$data[SalerName]' AND  SalerName2='$data[SalerName2]' AND  devClearnTime='$data[devClearnTime]'";
+                        WHERE SalerName='$data[SalerName]' AND  SalerName2='$data[SalerName2]' AND  devClearnTime='$data[devClearnTime]' AND   storename= '$data[storename]'";
             }
 
             $result =$Model->execute($sql);

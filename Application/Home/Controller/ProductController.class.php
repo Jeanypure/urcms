@@ -460,21 +460,19 @@ class ProductController extends ParentController
             $date = (string)$sheet->getCell("D".$i)->getValue();
             $stamp_date      = \PHPExcel_Shared_Date::ExcelToPHP($date);//将获取的奇怪数字转成时间戳，该时间戳会自动带上当前日期
             $data['ClearanceDate'] = gmdate("Y-m-d",$stamp_date);//这个就是excel表中的数据了，棒棒的！
+            $data['storename'] = $sheet->getCell("E".$i)->getValue();
 
             $Model = M();
             $sql = "select * from Y_offlineclearn WHERE suffix='$data[suffix]' AND  ClearanceDate='$data[ClearanceDate]' ";
             $res = $Model->query($sql);
 
             if(!$res){
-                // $result = M('offlineclearn')->add($data);                                                               //不存在做插入
                 $Model = M();
-//                INSERT INTO [y_offlineclearn] ([plat],[suffix],[diefeeZn]) VALUES ('eBay','01-buy','264.4457')
-                $sql ="insert into Y_offlineclearn (plat,suffix,diefeeZn,ClearanceDate) values ('$data[plat]','$data[suffix]',$data[diefeeZn],'$data[ClearanceDate]')";
+                $sql ="insert into Y_offlineclearn (plat,suffix,diefeeZn,ClearanceDate,storename) values ('$data[plat]','$data[suffix]',$data[diefeeZn],'$data[ClearanceDate]','$data[storename]')";
                 $result = $Model->execute($sql);
 
             }else{
-                //$result = M('offlineclearn')->where("suffix='$data[suffix]' and ClearanceDate='$data[ClearanceDate]'")->save($data);                              //表中已存在做更新
-                $sql = "UPDATE Y_offlineclearn SET plat='$data[plat]',suffix='$data[suffix]',diefeeZn='$data[diefeeZn]',ClearanceDate='$data[ClearanceDate]' WHERE suffix='$data[suffix]' AND ClearanceDate='$data[ClearanceDate]'";
+                $sql = "UPDATE Y_offlineclearn SET plat='$data[plat]',suffix='$data[suffix]',diefeeZn='$data[diefeeZn]',ClearanceDate='$data[ClearanceDate]' WHERE suffix='$data[suffix]' AND ClearanceDate='$data[ClearanceDate]'AND ClearanceDate='$data[storename]'";
                 $result = $Model->execute($sql);
             }
 

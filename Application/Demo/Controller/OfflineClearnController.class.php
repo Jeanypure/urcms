@@ -74,35 +74,25 @@ class OfflineClearnController extends ParentController
         $highestRow = $sheet->getHighestRow(); // 取得总行数
         $highestColumm = $sheet->getHighestColumn(); // 取得总列数
 
-
-
         for ($i=2; $i<=$highestRow; ++$i) {
 //            Possess	TimeGroup	Amount	PossessClearnTime
-
-
             $data['Possess']  = $sheet->getCell("A".$i)->getValue();
             $data['TimeGroup']  = $sheet->getCell("B".$i)->getValue();
             $data['Amount']     = $sheet->getCell("C".$i)->getValue();
             $date               =  (string)$sheet->getCell("D".$i)->getValue();
             $stamp_date         = \PHPExcel_Shared_Date::ExcelToPHP($date);//将获取的奇怪数字转成时间戳，该时间戳会自动带上当前日期
-            $data['PossessClearnTime'] = gmdate("Y-m-d ",$stamp_date);//这个就是excel表中的数据了，棒棒的！
-
+            $data['PossessClearnTime'] = gmdate("Y-m-d ",$stamp_date); //这个就是excel表中的数据了，棒棒的！
             $Model = M();
-            $sql = "select * from Y_PossessOfflineClearn WHERE Possess='$data[Possess]' AND  PossessClearnTime='$data[PossessClearnTime]'";
+            $sql = "select * from Y_PossessOfflineClearn WHERE Possess='$data[Possess]' AND  PossessClearnTime='$data[PossessClearnTime]' AND  TimeGroup= '$data[TimeGroup]'";
             $res = $Model->execute($sql);
-
-
             if(!$res){
                 $sql = "INSERT INTO Y_PossessOfflineClearn (Possess,TimeGroup,Amount,PossessClearnTime) VALUES('$data[Possess]','$data[TimeGroup]','$data[Amount]','$data[PossessClearnTime]')";
                 //$result = M('saleOpeFee')->add($data);                                                               //不存在做插入
             }else{
-
                 $sql = "UPDATE Y_PossessOfflineClearn SET  Possess='$data[Possess]',TimeGroup='$data[TimeGroup]',Amount='$data[Amount]', PossessClearnTime='$data[PossessClearnTime]'
                         WHERE Possess='$data[Possess]' AND  PossessClearnTime='$data[PossessClearnTime]'";
             }
-
             $result =$Model->execute($sql);
-
             if($result){
                 //设置成功后跳转页面的地址，默认的返回页面是$_SERVER['HTTP_REFERER']
                 $this->success('导入成功');
@@ -113,16 +103,10 @@ class OfflineClearnController extends ParentController
         }
     }
 
-
-
-
-
-
     //采购死库费用上传  Y_purOfflineClearn
     public function upload_purclearn(){
 
         if (IS_POST) {
-
             $upload = new \Think\Upload();// 实例化上传类
             $upload->maxSize = 3145728 ;// 设置附件上传大小
             $upload->exts = array('xlsx', 'xls');// 设置附件上传类型
